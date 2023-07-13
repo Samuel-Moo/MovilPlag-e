@@ -87,29 +87,7 @@
         app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
 
-
-            <ImageButton
-                android:id="@+id/btn_sintomas"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/green"
-                app:srcCompat="@drawable/ic_home_black_24dp" />
-
-            <TextView
-                android:id="@+id/txt_sintomas"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/green"
-                android:text="Home"
-                android:textAlignment="center"
-                android:textColor="@color/white" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -118,7 +96,7 @@
             android:orientation="vertical">
 
             <ImageButton
-                android:id="@+id/btn_nombre"
+                android:id="@+id/btn_map"
                 android:layout_width="195dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -126,11 +104,11 @@
                 app:srcCompat="@drawable/ic_map_black_24" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/text_map"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/green"
-                android:text="MAP"
+                android:text="Map"
                 android:textAlignment="center"
                 android:textColor="@color/white" />
 
@@ -179,7 +157,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/green"
-                android:text="Buy"
+                android:text="Tutorials"
                 android:textAlignment="center"
                 android:textColor="@color/white" />
         </LinearLayout>
