@@ -80,7 +80,8 @@ class MainActivity : AppCompatActivity() {
             { error ->
                 // Manejar el error
                 Log.e(ContentValues.TAG, "Error en la solicitud: $error")
-
+                lbl_corX.text = "ERROR EN LA CONSULTA"
+                lbl_corY.text = "ERROR EN LA CONSULTA"
             })
 
         requestQueue.add(request)
