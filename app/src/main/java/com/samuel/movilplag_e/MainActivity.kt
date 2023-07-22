@@ -1,27 +1,25 @@
 package com.samuel.movilplag_e
 
-import android.content.ContentValues
+import MyAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.RequestQueue
-import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
-
-
-private lateinit var lbl_corX: TextView
-private lateinit var lbl_corY: TextView
-private lateinit var btn_buy: ImageButton
-private lateinit var btn_map: ImageButton
-private lateinit var btn_tuto: ImageButton
-
+import org.json.JSONException
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var listView: ListView
+    private lateinit var adapter: MyAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -29,14 +27,52 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        lbl_corX = findViewById(R.id.name_robot)
-        lbl_corY = findViewById(R.id.test)
-        btn_buy = findViewById(R.id.btn_buy)
-        btn_map = findViewById(R.id.btn_map)
-        btn_tuto = findViewById(R.id.btn_tutorials)
+        listView = findViewById(R.id.listView)
 
-        val robotId = "000001"
-        consulta(robotId)
+        // Realizar la solicitud HTTP con Volley
+        val url = "https://plag-7cpancfkj-0marcontreras.vercel.app/api/users/117285217356016446690/robots"
+        val requestQueue: RequestQueue = Volley.newRequestQueue(this)
+
+        val request = JsonArrayRequest(
+            Request.Method.GET, url, null,
+            { response ->
+                try {
+                    // Procesar la respuesta JSON y construir la lista de objetos MyItem
+                    val items: MutableList<UserRobotDataClass> = mutableListOf()
+                    for (i in 0 until response.length()) {
+                        val itemJson = response.getJSONObject(i)
+                        val code = itemJson.getString("code")
+                        val name = itemJson.getString("Rname")
+                        val waste = itemJson.getInt("waste")
+                        val locationJson = itemJson.getJSONObject("location")
+                        val locationX = locationJson.getDouble("x")
+                        val locationY = locationJson.getDouble("y")
+
+                        val myItem = UserRobotDataClass(code, name, waste, locationX, locationY)
+                        items.add(myItem)
+                    }
+
+                    // Inicializar el adaptador y configurar el ListView
+                    adapter = MyAdapter(this, items)
+                    listView.adapter = adapter
+                } catch (e: JSONException) {
+                    Log.e("MainActivity", "Error al procesar la respuesta JSON", e)
+                }
+            },
+            { error ->
+                Log.e("MainActivity", "Error en la solicitud HTTP", error)
+            }
+        )
+
+        requestQueue.add(request)
+
+        val btn_buy = findViewById<ImageButton>(R.id.btn_buy)
+        val btn_map = findViewById<ImageButton>(R.id.btn_map)
+        val btn_tuto = findViewById<ImageButton>(R.id.btn_tutorials)
+        //val btn_go_to_map = findViewById<Button>(R.id.btn_go_to_map)
+
+        //val userId = "117285217356016446690"
+        //consulta(userId, x_display, y_display, name_robot, waste_display, code_display)
 
         btn_buy.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@MainActivity, buy::class.java)
@@ -53,39 +89,16 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         })
 
+        /*btn_go_to_map.setOnClickListener(View.OnClickListener {
+            val intent = Intent(this@MainActivity, map::class.java )
+            startActivity(intent)
+        })*/
+
     }
 
-    private lateinit var requestQueue: RequestQueue
 
 
-    private fun consulta(robotId: String){
 
-
-        requestQueue = Volley.newRequestQueue(this)
-
-        var url = "https://plag-api.vercel.app/api/robots/$robotId/coordinates"
-
-        val request = JsonObjectRequest(
-            Request.Method.GET, url, null,
-            { response ->
-
-                Log.d("RESPUESTA",response.toString())
-                val corX = response.getString("x")
-                val corY = response.getString("y")
-
-                lbl_corX.text = "X: $corX"
-                lbl_corY.text = "Y: $corY"
-
-            },
-            { error ->
-                // Manejar el error
-                Log.e(ContentValues.TAG, "Error en la solicitud: $error")
-                lbl_corX.text = "ERROR EN LA CONSULTA"
-                lbl_corY.text = "ERROR EN LA CONSULTA"
-            })
-
-        requestQueue.add(request)
-    }
 
 
 
