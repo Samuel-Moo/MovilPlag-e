@@ -1,7 +1,13 @@
 package com.samuel.movilplag_e
 
+import android.content.ContentValues
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -15,6 +21,8 @@ class map : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapBinding
+    private lateinit var requestQueue: RequestQueue
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +47,33 @@ class map : AppCompatActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        requestQueue = Volley.newRequestQueue(this)
 
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        val url = "https://plag-7cpancfkj-0marcontreras.vercel.app/api/robots/000001/coordinates"
+
+        val request = JsonObjectRequest(
+            Request.Method.GET, url, null,
+            { response ->
+
+                Log.d("RESPUESTA",response.toString())
+                val corX = response.getDouble("x")
+                val corY = response.getDouble("y")
+
+
+                // Add a marker in Sydney and move the camera
+                val robot = LatLng(corX, corY)
+                mMap.addMarker(MarkerOptions().position(robot).title("Robot"))
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(robot))
+
+            },
+            { error ->
+                // Manejar el error
+                Log.e(ContentValues.TAG, "Error en la solicitud: $error")
+
+            })
+
+        requestQueue.add(request)
+
+
     }
 }

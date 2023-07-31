@@ -18,7 +18,6 @@
             android:name=".tutorials"
             android:exported="false" />
         <!--
-             TODO: Before you run your application, you need a Google Maps API key.
 
              To get one, follow the directions here:
 
@@ -30,7 +29,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaRST987654321" />
+            android:value="${MAPS_API_KEY}" />
 
         <activity
             android:name=".map"
