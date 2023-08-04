@@ -8,3 +8,8 @@ data class UserRobotDataClass(
     val locationY: Double
 )
 
+
+data class postRobot(
+    val code: String,
+    val userId: String
+)

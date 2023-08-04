@@ -102,6 +102,29 @@
                 android:textAlignment="center"
                 android:textColor="@color/white" />
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+
+            <ImageButton
+                android:id="@+id/btn_add"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@color/green"
+                app:srcCompat="@drawable/baseline_add_24" />
+
+            <TextView
+                android:id="@+id/txt_add"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/green"
+                android:text="Add Robot"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+        </LinearLayout>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

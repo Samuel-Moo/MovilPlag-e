@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
@@ -69,6 +68,7 @@ class MainActivity : AppCompatActivity() {
         val btn_buy = findViewById<ImageButton>(R.id.btn_buy)
         val btn_map = findViewById<ImageButton>(R.id.btn_map)
         val btn_tuto = findViewById<ImageButton>(R.id.btn_tutorials)
+        val btn_add = findViewById<ImageButton>(R.id.btn_add)
         //val btn_go_to_map = findViewById<Button>(R.id.btn_go_to_map)
 
         //val userId = "117285217356016446690"
@@ -86,6 +86,11 @@ class MainActivity : AppCompatActivity() {
 
         btn_tuto.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@MainActivity, tutorials::class.java)
+            startActivity(intent)
+        })
+
+        btn_add.setOnClickListener(View.OnClickListener{
+            val intent = Intent(this@MainActivity, addRobot::class.java)
             startActivity(intent)
         })
 
