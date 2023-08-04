@@ -14,12 +14,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MovilPlage"
         tools:targetApi="31">
+
+        <activity
+            android:name=".robot_card"
+            android:exported="false" />
+        <activity
+            android:name=".addRobot"
+            android:exported="false" />
         <activity
             android:name=".tutorials"
             android:exported="false" />
         <!--
-             TODO: Before you run your application, you need a Google Maps API key.
-
              To get one, follow the directions here:
 
                 https://developers.google.com/maps/documentation/android-sdk/get-api-key
@@ -30,7 +35,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaRST987654321" />
+            android:value="${MAPS_API_KEY}" />
 
         <activity
             android:name=".map"
