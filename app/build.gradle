@@ -4,6 +4,8 @@ plugins {
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
+apply plugin: 'com.android.application'
+
 android {
     namespace 'com.samuel.movilplag_e'
     compileSdk 34
@@ -50,5 +52,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     implementation 'com.android.volley:volley:1.2.1'
+    implementation 'com.google.android.gms:play-services-auth:20.6.0'
+
 
 }
