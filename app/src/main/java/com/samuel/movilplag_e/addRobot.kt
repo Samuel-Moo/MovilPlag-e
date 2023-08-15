@@ -13,11 +13,12 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.common.api.ApiException
 
 
 class addRobot : AppCompatActivity() {
 
-    private val baseUrl = "https://plag-7cpancfkj-0marcontreras.vercel.app/api/users/117285217356016446690/link/"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,10 +34,18 @@ class addRobot : AppCompatActivity() {
     }
 
     private fun makePostRequest(code: String) {
+
+        var googleId = ""
+        try {
+            googleId = SharedData().GoogleId(this@addRobot)
+        } catch (e: ApiException){
+            Log.e("Error", "An error occurred while retrieving Google ID: ${e.message}")
+        }
+        val baseUrl = "https://plag-7cpancfkj-0marcontreras.vercel.app/api/users/${googleId}/link/${code}"
         val url = "$baseUrl$code"
 
         val queue: RequestQueue = Volley.newRequestQueue(this)
-        val stringRequest = object : StringRequest(Request.Method.POST, url,
+        val stringRequest = object : StringRequest(Request.Method.POST, baseUrl,
             Response.Listener { response ->
                 Log.d("POST_REQUEST", "Response: $response")
 

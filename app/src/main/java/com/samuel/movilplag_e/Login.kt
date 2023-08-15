@@ -1,10 +1,16 @@
 package com.samuel.movilplag_e
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -15,10 +21,14 @@ import com.google.android.gms.tasks.Task
 class Login : AppCompatActivity() {
 
     private lateinit var mGoogleSignInClient: GoogleSignInClient
+    private lateinit var sharedPreferences: SharedPreferences
+    private var isInitialized = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+
 
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -26,12 +36,14 @@ class Login : AppCompatActivity() {
             .requestEmail()
             .build()
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-
+        mGoogleSignInClient = GoogleSignIn.getClient(this@Login, gso)
         val googleLoginButton = findViewById<Button>(R.id.google_login_btn)
         googleLoginButton.setOnClickListener {
             signIn()
         }
+        sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+
+        isInitialized = true
     }
 
     private fun signIn() {
@@ -42,11 +54,17 @@ class Login : AppCompatActivity() {
 
     }
 
-    private fun signOut() {
-        mGoogleSignInClient.signOut()
-            .addOnCompleteListener(this) {
-                // Update your UI here
-            }
+    fun signOut() {
+        if (isInitialized) { // Check if mGoogleSignInClient has been initialized
+            mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this) {
+                    val settings: SharedPreferences =
+                        this.getSharedPreferences("MyPrefs", MODE_PRIVATE)
+                    settings.edit().clear().apply()
+                    this.cacheDir.deleteRecursively()
+
+                }
+        }
     }
 
     private fun revokeAccess() {
@@ -89,15 +107,18 @@ class Login : AppCompatActivity() {
             val googleIdToken = account?.idToken ?: ""
             Log.i("Google ID Token", googleIdToken)
 
+            val editor = sharedPreferences.edit()
+            editor.putString("google_id", googleId)
+            editor.apply()
+            makePostRequest(googleId, googleFirstName)
 
-            val myIntent = Intent(this, MainActivity::class.java)
+
             /* myIntent.putExtra("google_id", googleId)
             myIntent.putExtra("google_first_name", googleFirstName)
             myIntent.putExtra("google_last_name", googleLastName)
             myIntent.putExtra("google_email", googleEmail)
             myIntent.putExtra("google_profile_pic_url", googleProfilePicURL)
             myIntent.putExtra("google_id_token", googleIdToken)*/
-            this.startActivity(myIntent)
         } catch (e: ApiException) {
             // Sign in was unsuccessful
             Log.e(
@@ -105,5 +126,35 @@ class Login : AppCompatActivity() {
             )
         }
     }
+
+    private fun makePostRequest(code: String, display: String) {
+        val url = "https://plag-7cpancfkj-0marcontreras.vercel.app/api/users/${code}/${display}"
+
+        val queue: RequestQueue = Volley.newRequestQueue(this)
+
+        val stringRequest = StringRequest(
+            Request.Method.POST, url,
+            { response ->
+                Log.d("POST_REQUEST", "Response: $response")
+
+                Toast.makeText(this@Login, "Successful. Redirecting",
+                    Toast.LENGTH_LONG).show()
+                val myIntent = Intent(this, MainActivity::class.java)
+
+                this.startActivity(myIntent)
+                finish()
+            },
+            { error ->
+                Log.e("POST_REQUEST", "Error: $error")
+                Toast.makeText(this@Login, "User Is Already Registered",
+                    Toast.LENGTH_LONG).show()
+                val myIntent = Intent(this, MainActivity::class.java)
+
+                this.startActivity(myIntent)
+            })
+
+        queue.add(stringRequest)
+    }
+
 }
 
