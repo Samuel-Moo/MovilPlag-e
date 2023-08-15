@@ -24,7 +24,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        val intent = Intent(this@MainActivity, Login::class.java)
+        startActivity(intent)
 
         listView = findViewById(R.id.listView)
 
