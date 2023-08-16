@@ -2,7 +2,6 @@ package com.samuel.movilplag_e
 
 import MyAdapter
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -28,6 +27,8 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
         val googleId = SharedData().GoogleId(this@MainActivity)
         if (googleId.isEmpty()) {
             val intent = Intent(this@MainActivity, Login::class.java)
@@ -90,10 +91,7 @@ class MainActivity : AppCompatActivity() {
             try {
                 val login = Login()
                 login.signOut()
-                val settings: SharedPreferences =
-                    this.getSharedPreferences("MyPrefs", MODE_PRIVATE)
-                settings.edit().clear().apply()
-                this.cacheDir.deleteRecursively()
+
                 Toast.makeText(this@MainActivity, "Logout Succesful",
                     Toast.LENGTH_LONG).show()
                 val intent = Intent(this@MainActivity, Login::class.java)

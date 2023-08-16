@@ -5,16 +5,22 @@
     android:layout_height="match_parent"
 
     tools:context=".MainActivity">
-    <Button
-        android:id="@+id/google_login_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
 
-        android:drawablePadding="8dp"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/google_login_btn"
+        android:layout_width="334dp"
+        android:layout_height="115dp"
+        android:layout_centerInParent="true"
+        android:background="@color/green"
+        android:bottomLeftRadius="10dp"
+        android:bottomRightRadius="10dp"
+        android:drawableLeft="@mipmap/ic_google_foreground"
+        android:drawablePadding="0dp"
         android:padding="8dp"
         android:text="Sign in with Google"
         android:textAllCaps="false"
-
-        android:textStyle="bold" />
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:topLeftRadius="10dp"
+        android:topRightRadius="10dp" />
 </RelativeLayout>

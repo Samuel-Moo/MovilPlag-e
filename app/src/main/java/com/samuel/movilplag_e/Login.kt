@@ -42,6 +42,7 @@ class Login : AppCompatActivity() {
             signIn()
         }
         sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        Log.i("SharedPreferences", sharedPreferences.toString())
 
         isInitialized = true
     }
@@ -58,11 +59,8 @@ class Login : AppCompatActivity() {
         if (isInitialized) { // Check if mGoogleSignInClient has been initialized
             mGoogleSignInClient.signOut()
                 .addOnCompleteListener(this) {
-                    val settings: SharedPreferences =
-                        this.getSharedPreferences("MyPrefs", MODE_PRIVATE)
-                    settings.edit().clear().apply()
-                    this.cacheDir.deleteRecursively()
 
+                    SharedData().clean(this)
                 }
         }
     }
