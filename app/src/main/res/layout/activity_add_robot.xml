@@ -11,7 +11,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="16dp"
-        tools:context=".MainActivity">
+        tools:context=".MainActivity"
+        tools:layout_editor_absoluteX="-45dp"
+        tools:layout_editor_absoluteY="-124dp">
 
         <EditText
             android:id="@+id/codeEditText"
@@ -21,10 +23,11 @@
             android:inputType="text"
             android:maxLines="1" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/clickButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/green"
             android:text="Add Robot" />
 
     </LinearLayout>

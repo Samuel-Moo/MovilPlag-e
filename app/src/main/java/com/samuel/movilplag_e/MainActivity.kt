@@ -5,14 +5,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.common.api.ApiException
 import org.json.JSONException
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,11 +29,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
+        val googleId = SharedData().GoogleId(this@MainActivity)
+        if (googleId.isEmpty()) {
+            val intent = Intent(this@MainActivity, Login::class.java)
+            startActivity(intent)
+        }
+        Log.i("GoogleID", googleId)
 
         listView = findViewById(R.id.listView)
 
+
         // Realizar la solicitud HTTP con Volley
-        val url = "https://plag-7cpancfkj-0marcontreras.vercel.app/api/users/117285217356016446690/robots"
+
+        val url = "https://plag-7cpancfkj-0marcontreras.vercel.app/api/users/${googleId}/robots"
         val requestQueue: RequestQueue = Volley.newRequestQueue(this)
 
         val request = JsonArrayRequest(
@@ -69,10 +81,29 @@ class MainActivity : AppCompatActivity() {
         val btn_map = findViewById<ImageButton>(R.id.btn_map)
         val btn_tuto = findViewById<ImageButton>(R.id.btn_tutorials)
         val btn_add = findViewById<ImageButton>(R.id.btn_add)
+        val btn_logOut = findViewById<Button>(R.id.btn_log_out)
         //val btn_go_to_map = findViewById<Button>(R.id.btn_go_to_map)
 
         //val userId = "117285217356016446690"
         //consulta(userId, x_display, y_display, name_robot, waste_display, code_display)
+
+        btn_logOut.setOnClickListener{
+            try {
+                val login = Login()
+                login.signOut()
+
+                Toast.makeText(this@MainActivity, "Logout Succesful",
+                    Toast.LENGTH_LONG).show()
+                val intent = Intent(this@MainActivity, Login::class.java)
+                startActivity(intent)
+            } catch (e: ApiException){
+                Log.e("Error On Logout", "$e")
+                Toast.makeText(this@MainActivity, "Could not logout",
+                    Toast.LENGTH_LONG).show()
+            }
+
+        }
+
 
         btn_buy.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@MainActivity, buy::class.java)
@@ -100,7 +131,6 @@ class MainActivity : AppCompatActivity() {
         })*/
 
     }
-
 
 
 
